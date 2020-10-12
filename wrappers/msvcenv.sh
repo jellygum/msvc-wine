@@ -11,6 +11,7 @@ MSVCDIR="$BASE\\vc\\tools\\msvc\\$MSVCVER"
 SDKINCLUDE="$BASE\\$SDK\\include\\$SDKVER"
 SDKLIB="$BASE\\$SDK\\lib\\$SDKVER"
 BINDIR=$BASE_UNIX/vc/tools/msvc/$MSVCVER/bin/Hostx64/$ARCH
+MSBUILD=$BASE_UNIX/msbuild/Current/Bin
 SDKBINDIR=$BASE_UNIX/$SDK_UNIX/bin/$SDKVER/x64
 export INCLUDE="$MSVCDIR\\include;$SDKINCLUDE\\shared;$SDKINCLUDE\\ucrt;$SDKINCLUDE\\um;$SDKINCLUDE\\winrt"
 export LIB="$MSVCDIR\\lib\\$ARCH;$SDKLIB\\ucrt\\$ARCH;$SDKLIB\\um\\$ARCH"

@@ -23,9 +23,12 @@ DEST=$(pwd)
 if [ -n "$VC_ZIP" ]; then
     unzip $VC_ZIP
 fi
+
+if [ -e "VC" ]; then
 mv VC vc
 mv vc/Tools vc/tools
 mv vc/tools/MSVC vc/tools/msvc
+fi
 
 # Add symlinks like LIBCMT.lib -> libcmt.lib. These are properly lowercased
 # out of the box, but MSVC produces directives like /DEFAULTLIB:"LIBCMT"
@@ -36,7 +39,9 @@ cd $(echo vc/tools/msvc/* | awk '{print $1}')/lib
 for arch in x86 x64 arm arm64; do
     cd $arch
     for i in libcmt libcmtd msvcrt msvcrtd oldnames; do
-        ln -s $i.lib $(echo $i | tr [a-z] [A-Z]).lib
+		if [ ! -e $(echo $i | tr [a-z] [A-Z]).lib ]; then
+	        ln -s $i.lib $(echo $i | tr [a-z] [A-Z]).lib
+		fi
     done
     cd ..
 done
@@ -50,17 +55,26 @@ else
     unzip $SDK_ZIP
     cd 10
 fi
+
+if [ -e "Lib" ]; then
 mv Lib lib
 mv Include include
+fi
+
 cd ../..
 SDKVER=$(basename $(echo kits/10/include/* | awk '{print $NF}'))
-$ORIG/lowercase kits/10/include/$SDKVER/um
-$ORIG/lowercase kits/10/include/$SDKVER/shared
-$ORIG/fixinclude kits/10/include/$SDKVER/um
-$ORIG/fixinclude kits/10/include/$SDKVER/shared
-for arch in x86 x64 arm arm64; do
-    $ORIG/lowercase kits/10/lib/$SDKVER/um/$arch
-done
+
+if [ -e kits/10/include/$SDKVER/um ]; then
+
+	$ORIG/lowercase kits/10/include/$SDKVER/um
+	$ORIG/lowercase kits/10/include/$SDKVER/shared
+	$ORIG/fixinclude kits/10/include/$SDKVER/um
+	$ORIG/fixinclude kits/10/include/$SDKVER/shared
+	for arch in x86 x64 arm arm64; do
+	    $ORIG/lowercase kits/10/lib/$SDKVER/um/$arch
+	done
+
+fi
 
 SDKVER=$(basename $(echo kits/10/include/* | awk '{print $NF}'))
 MSVCVER=$(basename $(echo vc/tools/msvc/* | awk '{print $1}'))

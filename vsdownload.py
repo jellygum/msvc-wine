@@ -72,6 +72,11 @@ def setPackageSelectionMSVC16(args, packages, userversion, sdk, toolversion, def
         # version is requested, try the default version.
         print("Didn't find exact version packages for " + userversion + ", assuming this is provided by the default/latest version")
         args.package.extend(defaultPackages)
+	
+	# ------------------------------------------------------------------
+	# MSBuild
+	setPackageSelectionMSBuild(args, packages, sdk)
+	# ------------------------------------------------------------------
 
 def setPackageSelectionMSVC15(args, packages, userversion, sdk, toolversion, defaultPackages):
     if findPackage(packages, "Microsoft.VisualStudio.Component.VC.Tools." + toolversion, None, warn=False):
@@ -82,6 +87,17 @@ def setPackageSelectionMSVC15(args, packages, userversion, sdk, toolversion, def
         # version is requested, try the default version.
         print("Didn't find exact version packages for " + userversion + ", assuming this is provided by the default/latest version")
         args.package.extend(defaultPackages)
+
+def setPackageSelectionMSBuild(args, packages, sdk):
+    if findPackage(packages, "Microsoft.VisualStudio.Workload.MSBuildTools", None, warn=False):
+        args.package.extend(["Win10SDK_" + sdk, "Microsoft.VisualStudio.Workload.MSBuildTools"])
+    else:
+        print("Didn't find Microsoft.VisualStudio.Workload.MSBuildTools")
+
+    if findPackage(packages, "Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools", None, warn=False):
+        args.package.extend(["Win10SDK_" + sdk, "Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools"])
+    else:
+        print("Didn't find Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools")
 
 def setPackageSelection(args, packages):
     # If no packages are selected, install these versionless packages, which
@@ -508,6 +524,8 @@ def moveVCSDK(unpack, dest):
     makedirs(os.path.join(dest, "kits"))
     mergeTrees(os.path.join(unpack, "VC"), os.path.join(dest, "VC"))
     mergeTrees(os.path.join(unpack, "Program Files", "Windows Kits", "10"), os.path.join(dest, "kits", "10"))
+	# C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin
+    mergeTrees(os.path.join(unpack, "Msbuild"), os.path.join(dest, "msbuild"))
     # The DIA SDK isn't necessary for normal use, but can be used when e.g.
     # compiling LLVM.
     mergeTrees(os.path.join(unpack, "DIA SDK"), os.path.join(dest, "DIA SDK"))
