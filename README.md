@@ -27,5 +27,16 @@ The installer scripts also work fine without docker; just run the following two 
     ./vsdownload.py --dest <dir>
     ./install.sh <dir>
 
+---
+
+    sudo pip2 install simplejson
+    sudo pip3 install simplejson
+
+    sudo apt install msitools
+
+    ./vsdownload.py --dest ~/msvc
+
+---
+
 The unpacking requires recent versions of msitools (0.98) and libgcab
 (1.2); sufficiently new versions are available in e.g. Ubuntu 19.04.
