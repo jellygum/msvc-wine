@@ -34,9 +34,9 @@ The installer scripts also work fine without docker; just run the following two 
 
     sudo apt install msitools
 
-    sudo ./vsdownload.py --dest /tmp/msvc
+    sudo ./vsdownload.py --dest /opt/msvc
 
-    sudo ./install.sh /tmp/msvc
+    sudo ./install.sh /opt/msvc
 
 ---
 
